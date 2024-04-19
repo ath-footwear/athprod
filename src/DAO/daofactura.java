@@ -17,6 +17,7 @@ import Modelo.factura;
 import Persistencia.sqlfactura;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -286,11 +287,89 @@ public class daofactura implements Facturas {
      * @param rcpt
      * @param cobranza
      * @param f
+     * @return 
      */
-    @Override
+   
     public void cancelafac(Connection cpt, Connection rcpt, Connection cobranza, factura f) {
         sqlfactura fac = new sqlfactura();
         fac.cancelafac(cpt, rcpt, cobranza, f);
+    }
+    
+    /**
+     * Valida si el cargo tiene abonos
+     * 
+     * @param cobranza
+     * @param factura
+     * @return 
+     */
+    public int getAbonosByFactura(Connection cobranza, String factura){
+        sqlfactura fac = new sqlfactura();
+        return fac.getAbonosByFactura(cobranza, factura);
+    }
+    
+    
+    /**
+     * Obtiene la fecha del cargo
+     * 
+     * @param cobranza
+     * @param factura
+     * @return 
+     */
+    public Object getFechaCargo(Connection cobranza, String factura){
+        sqlfactura fac = new sqlfactura();
+        return fac.getFechaCargo(cobranza, factura);
+    }
+    
+    /**
+     * Obtiene el detalle de la factura a cancelar
+     * 
+     * @param cpt
+     * @param factura
+     * @return 
+     */
+    public ArrayList<Dfactura> getDetalleFactura(Connection cpt, String factura){
+        sqlfactura fac = new sqlfactura();
+        return fac.getDetalleFactura(cpt, factura);
+    }
+    
+    
+    /**
+     * Valida si es una factura especial
+     * 
+     * @param cpt
+     * @param factura
+     * @return 
+     */
+    public int getTipoFactura(Connection cpt, int factura){
+        sqlfactura fac = new sqlfactura();
+        return fac.getTipoFactura(cpt, factura);
+    }
+    /**
+     * Cancela una factura especial
+     *
+     * @param cpt
+     * @param rcpt
+     * @param f
+     * @param a
+     * @return 
+     */
+    public boolean cancelarFacturaEspecial(Connection cpt, Connection rcpt, factura f, abono a) {
+        sqlfactura fac = new sqlfactura();
+        return fac.cancelarFacturaEspecial(cpt, rcpt, f, a);
+    }
+    
+    /**
+     * Cancela una factura nomal
+     *
+     * @param cpt
+     * @param rcpt
+     * @param f
+     * @param a
+     * @return 
+     */
+    public boolean cancelarFacturaNormal(Connection cpt, Connection rcpt, factura f, abono a) {
+        sqlfactura fac = new sqlfactura();
+        return fac.cancelarFacturaNormal(cpt, rcpt, f, a);
     }
 
     /**

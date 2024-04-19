@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Dfactura implements java.io.Serializable{
     private int id, idoc, producto,talla,cantidad,renglon,id_dpedimento,id_pedimento, years;
     private int c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14, almacen,linea,corrida,estilo,combinacion, foliokardex;
-    private String factura,descripcion, codigo, umedida, descripcionprov,impuesto, tasaocuota,tipofactor,uuid, stock, descumedida,dureza,fecha;
+    private String factura,descripcion, codigo, umedida, descripcionprov,impuesto, tasaocuota,tipofactor,uuid, stock, descumedida,dureza,fecha, serie;
     private double base,  importa, descuento,precio,  cantidadfloat, precioant,costo, cantrestante;
     private int kardex, cargo;
     private String pedido;
@@ -450,4 +450,14 @@ public class Dfactura implements java.io.Serializable{
     public void setDescuento(double descuento) {
         this.descuento = descuento;
     }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
+    }
+    
+    
 }

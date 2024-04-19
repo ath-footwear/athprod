@@ -36,6 +36,7 @@ public class timbrarXML {
     private String literal = "";
     private String estado = "";
     private String estatustim = "";
+    String response, mensaje;
     Sellofiscal s = new Sellofiscal();
     boolean produccion = false;
     String user = "testing@solucionfactible.com";
@@ -309,11 +310,21 @@ public class timbrarXML {
             if (re != null) {
                 for (CFDIResultadoCancelacion cfd : re) {
                     l = cfd.getMensaje() + ", Estatus: " + cfd.getStatus() + ", " + cfd.getStatusUUID();
+                    response = String.valueOf(cfd.getStatus());
+                    mensaje = cfd.getMensaje();
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(timbrarXML.class.getName()).log(Level.SEVERE, null, ex);
         }
         return l;
+    }
+
+    public String response() {
+        return response + ", " + mensaje;
+    }
+    
+    public String status(){
+        return response;
     }
 }

@@ -10,7 +10,8 @@ package Modelo;
  * @author GATEWAY1-
  */
 public class abono {
-    private String ref, referencia,ordenpago, nombre, folio,fechapago;
+    private String ref, referencia,referenciac,ordenpago, nombre, folio,fechapago;
+    private Object fechap, fechac;
     private int cliente, cuenta, subcuenta, parcialidad, id_cargo, id_abono, id_docto;
     private double total,totalpago, pago, saldo, anterior;
     private Cliente c;
@@ -166,4 +167,35 @@ public class abono {
     public void setTotalpago(double totalpago) {
         this.totalpago = totalpago;
     }
+
+    public String getReferenciac() {
+        return referenciac;
+    }
+
+    public void setReferenciac(String referenciac) {
+        this.referenciac = referenciac;
+    }
+
+    public Object getFechap() {
+        return fechap;
+    }
+
+    public void setFechap(Object fechap) {
+        this.fechap = fechap;
+    }
+
+    public Object getFechac() {
+        return fechac;
+    }
+
+    public void setFechac(Object fechac) {
+        this.fechac = fechac;
+    }
+   
+    
+
+    
+   
+    
+    
 }
