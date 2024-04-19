@@ -57,7 +57,7 @@ public class sqlclientes {
             rs.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return arr;
     }
@@ -67,7 +67,8 @@ public class sqlclientes {
         try {
             PreparedStatement st;
             ResultSet rs;
-            String sql = "select id_cliente,c.nombre as cliente,rfc,cp,calle,usocfdi,regimen,c.id_agente as agente,a.canal,c.plazo "
+            String sql = "select id_cliente,c.nombre as cliente,rfc,cp,calle,"
+                    + "usocfdi,regimen,c.id_agente as agente,a.canal,c.plazo,credito "
                     + "from cliente c\n"
                     + "join Agente a on  c.id_agente=a.id_agente\n"
                     + "where c.estatus='1'\n"
@@ -88,13 +89,14 @@ public class sqlclientes {
                 ag.setIdagente(rs.getInt("agente"));
                 ag.setIdcanal(rs.getInt("canal"));
                 c.setPlazo(rs.getInt("plazo"));
+                c.setCredito(rs.getDouble("credito"));
                 c.setAg(ag);
                 arr.add(c);
             }
             rs.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return arr;
     }
@@ -106,7 +108,7 @@ public class sqlclientes {
             ResultSet rs;
             String sql = "select id_cliente, id_agente, nombre, rfc, cp, razonsocial, "
                     + "usocfdi, calle, colonia, pais, Estado, regimen, estatus, ciudad,"
-                    + "correo,cuenta,telefono,plazo \n"
+                    + "correo,cuenta,telefono,plazo,credito \n"
                     + "from cliente c\n"
                     + "where nombre like ? \n"
                     + "order by id_cliente desc";
@@ -133,12 +135,13 @@ public class sqlclientes {
                 c.setTelefono(rs.getString("telefono"));
                 c.setAgente(rs.getInt("id_agente"));
                 c.setPlazo(rs.getInt("plazo"));
+                c.setCredito(rs.getDouble("credito"));
                 arr.add(c);
             }
             rs.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return arr;
     }
@@ -170,7 +173,7 @@ public class sqlclientes {
             rs.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return c;
     }
@@ -192,7 +195,7 @@ public class sqlclientes {
             rs.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return c;
     }
@@ -216,10 +219,11 @@ public class sqlclientes {
                 st = c.prepareStatement(sql);
                 st.executeUpdate();
             }
-            sql = "insert into Cliente(id_cliente,id_agente,nombre,rfc,cp,razonsocial,usocfdi,calle,colonia,pais,estado,regimen,estatus,ciudad,plazo) "
+            sql = "insert into Cliente(id_cliente,id_agente,nombre,rfc,cp,razonsocial,usocfdi,"
+                    + "calle,colonia,pais,estado,regimen,estatus,ciudad,plazo, credito) "
                     + "values(" + cli.getCvecliente() + "," + cli.getAgente() + ",'" + cli.getNombre() + "','" + cli.getRfc() + "','"
                     + cli.getCp() + "','" + cli.getNombre() + "','" + cli.getUsocfdi() + "','" + cli.getCalle() + "','" + cli.getColonia() + "','"
-                    + cli.getPais() + "','" + cli.getEstado() + "','" + cli.getRegimen() + "','1','" + cli.getCiudad() + "',30)";
+                    + cli.getPais() + "','" + cli.getEstado() + "','" + cli.getRegimen() + "','1','" + cli.getCiudad() + "',30,0)";
 //            System.out.println(sql);
             st = c.prepareStatement(sql);
             st.executeUpdate();
@@ -241,7 +245,8 @@ public class sqlclientes {
             cpt.setAutoCommit(false);
             PreparedStatement st;
             String sql = "update cliente set nombre=?,rfc=?,cp=?,usocfdi=?,calle=?,colonia=?,pais=?,"
-                    + "estado=?,regimen=?,ciudad=?,correo=?,cuenta=?,telefono=?, id_agente=?, plazo=?  "
+                    + "estado=?,regimen=?,ciudad=?,correo=?,cuenta=?,telefono=?, id_agente=?, plazo=?,"
+                    + "credito=? "
                     + "where id_cliente=?";
             st = cpt.prepareStatement(sql);
             st.setString(1, c.getNombre());
@@ -259,7 +264,8 @@ public class sqlclientes {
             st.setString(13, c.getTelefono());
             st.setInt(14, c.getAgente());
             st.setInt(15, c.getPlazo());
-            st.setInt(16, c.getCvecliente());
+            st.setDouble(16, c.getCredito());
+            st.setInt(17, c.getCvecliente());
             st.executeUpdate();
 //            System.out.println("mod cliente " + i);
             cpt.commit();
@@ -300,8 +306,8 @@ public class sqlclientes {
             PreparedStatement st;
             String sql = "insert into cliente(id_cliente,id_agente,nombre,rfc,cp,razonsocial,"
                     + "usocfdi,calle,colonia,pais,estado,regimen,estatus,ciudad,"
-                    + "correo,cuenta,telefono, plazo) "
-                    + "values(?,?,?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?,?)";
+                    + "correo,cuenta,telefono, plazo, credito) "
+                    + "values(?,?,?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?,?,?)";
             cpt.setAutoCommit(false);
             st = cpt.prepareStatement(sql);
             st.setInt(1, c.getCvecliente());
@@ -321,6 +327,7 @@ public class sqlclientes {
             st.setString(15, "");
             st.setString(16, c.getTelefono());
             st.setInt(17, c.getPlazo());
+            st.setDouble(18, c.getCredito());
             st.executeUpdate();
             cpt.commit();
             return true;
@@ -336,4 +343,135 @@ public class sqlclientes {
         }
     }
 
+    public boolean exist_cliente(Connection con, Cliente c) {//cobranza
+        boolean flag = false;
+        try {
+            PreparedStatement st;
+            ResultSet rs;
+            st = con.prepareStatement("select id_cliente\n"
+                    + "from cliente\n"
+                    + "where id_cliente=?");
+            st.setInt(1, c.getCvecliente());
+            rs = st.executeQuery();
+            while (rs.next()) {
+                flag = true;
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            flag = false;
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return flag;
+    }
+
+    public Cliente getClientetpu(Connection con, int idcliente) {//cobranza
+        Cliente c = new Cliente();
+        try {
+            PreparedStatement st;
+            ResultSet rs;
+            st = con.prepareStatement("select nombre,rfc,cp,regimen from cliente where id_cliente=?");
+            st.setInt(1, idcliente);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                c.setCvecliente(idcliente);
+                c.setNombre(rs.getString("nombre"));
+                c.setRfc(rs.getString("rfc"));
+                c.setCp(rs.getString("cp"));
+                c.setRegimen(rs.getString("regimen"));
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(sqlclientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return c;
+    }
+
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes(Connection con, String nombre, String bd) {//cargos para ncr solo cobranza
+        ArrayList<Cliente> arr = new ArrayList<>();
+        try {
+            PreparedStatement st;
+            ResultSet rs;
+            String sql = "select distinct cli.id_cliente,cli.nombre\n"
+                    + "from " + bd + ".dbo.cargo c\n"
+                    + "join " + bd + ".dbo.cliente cli on c.id_cliente=cli.id_cliente\n"
+                    + "join Documento d on c.referencia =d.folio\n"
+                    + "where cli.nombre like '%" + nombre + "%' and c.referencia NOT Like '%NCR%' "
+                    + "and saldo!=0 and d.Serie='fac' and d.estatus='1' "
+                    + "and ISNULL(foliofiscal,'') !='' and foliofiscal!= 'null' \n"
+                    + "order by cli.nombre";
+            System.out.println("get clientencr " + sql);
+            st = con.prepareStatement(sql);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Cliente cli = new Cliente();
+                cli.setCvecliente(rs.getInt("id_cliente"));
+                cli.setNombre(rs.getString("nombre"));
+                arr.add(cli);
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arr;
+    }
+
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes_ESPECIAL(Connection con,
+            String nombre, String bd) {//cargos para ncr solo cobranza
+        ArrayList<Cliente> arr = new ArrayList<>();
+        try {
+            PreparedStatement st;
+            ResultSet rs;
+            String sql = "select distinct cli.id_cliente,cli.nombre\n"
+                    + "from cargoespecial c\n"
+                    + "join cliente cli on c.id_cliente=cli.id_cliente\n"
+                    + "where cli.nombre like '%"+nombre+"%' and "
+                    + "c.referencia NOT Like '%NCR%' and (saldo!=0 or saldomx!=0)\n"
+                    + "order by cli.nombre";
+//            System.out.println("get clientepagr " + sql);
+            st = con.prepareStatement(sql);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Cliente cli = new Cliente();
+                cli.setCvecliente(rs.getInt("id_cliente"));
+                cli.setNombre(rs.getString("nombre"));
+                arr.add(cli);
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arr;
+    }
+
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes_REM(Connection con, String nombre) {//cargos para ncr solo cobranza
+        ArrayList<Cliente> arr = new ArrayList<>();
+        try {
+            PreparedStatement st;
+            ResultSet rs;
+            String sql = "select distinct cli.id_cliente,cli.nombre\n"
+                    + "from cargo c\n"
+                    + "join cliente cli on c.id_cliente=cli.id_cliente\n"
+                    + "where cli.nombre like '%" + nombre + "%' and c.referencia NOT Like '%NCR%' "
+                    + "and saldo!=0 and c.estatus='1' \n"
+                    + "order by cli.nombre";
+//            System.out.println("get clientencr " + sql);
+            st = con.prepareStatement(sql);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Cliente cli = new Cliente();
+                cli.setCvecliente(rs.getInt("id_cliente"));
+                cli.setNombre(rs.getString("nombre"));
+                arr.add(cli);
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(sqlcolor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arr;
+    }
 }

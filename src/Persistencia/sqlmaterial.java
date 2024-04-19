@@ -70,7 +70,9 @@ public class sqlmaterial {
         try {
             PreparedStatement st;
             ResultSet rs;
-            st = con.prepareStatement("select * from Materiales where descripcion like '%" + mat + "%' order by descripcion");
+            st = con.prepareStatement("select * from Materiales "
+                    + "where descripcion like '%" + mat + "%' and estatus='1' "
+                    + "order by descripcion");
             rs = st.executeQuery();
             while (rs.next()) {
                 Materiales m = new Materiales();
@@ -137,8 +139,11 @@ public class sqlmaterial {
             String i1 = m.getImag1();
             String i2 = m.getImag2();
             String i3 = m.getImag3();
-            String sql = "insert into Materiales(descripcion,precio,estatus,unidad,codigosat,id_familia,moneda,modelo,noserie,imag1,imag2,imag3)"
-                    + " values('" + tipo + "'," + precio + ",'1','" + unidad + "','" + codigosat + "'," + idfam + ",'" + mon + "','" + mat + "','" + nserie + "','" + i1 + "','" + i2 + "','" + i3 + "')";
+            String sql = "insert into Materiales(descripcion,precio,estatus,unidad,codigosat,"
+                    + "id_familia,moneda,modelo,noserie,imag1,imag2,imag3)"
+                    + " values('" + tipo + "'," + precio + ",'1','" + unidad + "','"
+                    + codigosat + "'," + idfam + ",'" + mon + "','" + mat + "','"
+                    + nserie + "','" + i1 + "','" + i2 + "','" + i3 + "')";
 //            System.out.println(sql);
             st = con.prepareStatement(sql);
             st.executeUpdate();
@@ -159,7 +164,8 @@ public class sqlmaterial {
                     + "noserie,moneda,f.descripcion as marca,m.estatus, m.modelo as model\n"
                     + "from materiales m\n"
                     + "join familias f on m.id_familia=f.id_familia\n"
-                    + "where m.descripcion like '%" + mat + "%' order by m.descripcion";
+                    + "where m.descripcion like '%" + mat + "%' and m.estatus='1' "
+                    + "order by m.descripcion";
             st = con.prepareStatement(sql);
 //            System.out.println(sql);
             rs = st.executeQuery();
@@ -204,5 +210,29 @@ public class sqlmaterial {
             }
             return false;
         }
+    }
+
+    public boolean check_nserie(Connection c, Materiales m) {
+        boolean flag = false;
+        PreparedStatement st;
+        ResultSet rs;
+        try {
+            String sql = "select id_material\n"
+                    + "from materiales\n"
+                    + "where modelo=? and noserie=?";
+            st = c.prepareStatement(sql);
+            st.setString(1, m.getDescripcion());
+            st.setString(2, m.getNoserie());
+            rs = st.executeQuery();
+            while (rs.next()) {
+                flag = true;
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(sqlmaterial.class.getName()).log(Level.SEVERE, null, ex);
+            flag=true;
+        }
+        return flag;
     }
 }

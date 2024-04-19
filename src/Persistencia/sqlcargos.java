@@ -162,4 +162,27 @@ public class sqlcargos {
         return arr;
     }
 
+    public double get_Cargopendiente(Connection c, int cliente, String bd) {
+        double saldo = 0;
+        try {
+            String sql = "select isnull(sum(c.saldomx),0) as saldo,\n"
+                    + "isnull((select sum(saldomx) as saldoint \n"
+                    + "from " + bd + ".dbo.cargo where (saldo!=0 or saldomx!=0) and "
+                    + "estatus='1' and id_cliente=" + cliente + ") ,0)as saldoint\n"
+                    + "from cargo c\n"
+                    + "where (c.saldo!=0 or c.saldomx!=0) and c.estatus='1' and c.id_cliente=" + cliente;
+            PreparedStatement st;
+            ResultSet rs;
+            st = c.prepareStatement(sql);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                saldo = rs.getDouble("saldo") + rs.getDouble("saldoint");
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(sqlcargos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return saldo;
+    }
 }

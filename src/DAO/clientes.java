@@ -16,9 +16,9 @@ import java.util.ArrayList;
 public interface clientes {
 
     public ArrayList<Cliente> getClientes(Connection c);
-    
+
     public ArrayList<Cliente> getClientestpu(Connection c);
-    
+
     public ArrayList<Cliente> getClientestpuall(Connection c, String cli);
 
     public Cliente getCliente(Connection c, int id);
@@ -26,11 +26,22 @@ public interface clientes {
     public Cliente getClientes(Connection c, int cliente);
 
     public boolean importacliente(Connection c, Cliente cli);
-    
+
     public boolean modcliente(Connection cpt, Cliente cli);
-    
+
     public boolean nuevocliente(Connection cpt, Cliente cli);
-    
+
     public int maxcliente(Connection cob);
+
+    public boolean exist_cliente(Connection con, Cliente c);
+
+    public Cliente getClientetpu(Connection c, int id);
+
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes(Connection con, String nombre, String bd);
+
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes_REM(Connection con, String nombre);
+
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes_ESPECIAL(Connection con,
+            String nombre, String bd);
 
 }

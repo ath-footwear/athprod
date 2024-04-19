@@ -5,27 +5,36 @@
  */
 package Panelmaq;
 
+import DAO.dao_comisiones;
 import DAO.daocfdi;
+import DAO.daoempresa;
 import DAO.daofactura;
-import Modelo.Ciudades;
-import Modelo.Estados;
-import Modelo.Formadepago;
+import Modelo.Comision;
+import Modelo.Empresas;
+import Modelo.Formateo_Nempresas;
 import Modelo.Formateodedatos;
-import Modelo.Paises;
 import Modelo.Usuarios;
 import Modelo.abono;
+import Modelo.convertnum;
 import Modelo.factura;
-import Modelo.metodopago;
-import Modelo.usocfdi;
-import Server.Serverprod;
-import Server.Serverylite;
+import Paneltpu.pagotpurem1;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import mx.sat.cfd40.timbrarXML;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -36,20 +45,9 @@ public class pagotpucargo1 extends javax.swing.JPanel {
     public String empresa, empresacob;
     public Connection sqlcfdi, sqlempresa;
     public Connection cpt, ACobranza;
-    Serverylite slite = new Serverylite();
-    Serverprod prod = new Serverprod();
-    public ArrayList<Formadepago> arrfpago = new ArrayList<>();
-    public ArrayList<usocfdi> arruso = new ArrayList<>();
-    public ArrayList<metodopago> arrmetodo = new ArrayList<>();
-    ArrayList<Paises> arrpais = new ArrayList<>();
-    ArrayList<Estados> arrestado = new ArrayList<>();
-    ArrayList<Ciudades> arrciudad = new ArrayList<>();
     ArrayList<factura> arrfactura = new ArrayList<>();
     ArrayList<factura> arrfacturaxml = new ArrayList<>();
     daocfdi dcfdi = new daocfdi();
-    int estado = 0;
-    int ciudad = 0;
-    int pais = 0;
     public Usuarios u;
 
     /**
@@ -72,6 +70,7 @@ public class pagotpucargo1 extends javax.swing.JPanel {
 
         pop = new javax.swing.JPopupMenu();
         JtCancelar = new javax.swing.JMenuItem();
+        JmCheckcancel = new javax.swing.JMenuItem();
         JtCliente = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -80,13 +79,23 @@ public class pagotpucargo1 extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
 
         JtCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Cancel_icon-icons.com_54824.png"))); // NOI18N
-        JtCancelar.setText("Cancelar NCR");
+        JtCancelar.setText("Cancelar Pago");
         JtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JtCancelarActionPerformed(evt);
             }
         });
         pop.add(JtCancelar);
+
+        JmCheckcancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/questionregular_106274.png"))); // NOI18N
+        JmCheckcancel.setText("Verificar cancelacion");
+        JmCheckcancel.setToolTipText("Verifica Status de cancelacion en el SAT");
+        JmCheckcancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmCheckcancelActionPerformed(evt);
+            }
+        });
+        pop.add(JmCheckcancel);
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -180,7 +189,10 @@ public class pagotpucargo1 extends javax.swing.JPanel {
     }//GEN-LAST:event_JtClienteActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-
+        int row = JtDetalle.getSelectedRow();
+        int folio = arrfactura.get(row).getId();
+        double total = arrfactura.get(row).getTotal();
+        setreport(folio, "MXN", total);
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel6MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MousePressed
@@ -191,16 +203,49 @@ public class pagotpucargo1 extends javax.swing.JPanel {
         if (evt.getButton() == 3) {// activar con clic derecho
             pop.show(evt.getComponent(), evt.getX(), evt.getY());
         }
+        int row = JtDetalle.getSelectedRow();
+        String e = arrfactura.get(row).getEstado();
+        String tim = (arrfactura.get(row).getFoliofiscal().equals("")) ? "N" : "T";
+        if (evt.getButton() == 3) {// activar con clic derecho
+            pop.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+        if (!arrfactura.get(row).getFoliofiscal().equals("")) {
+            JmCheckcancel.setVisible(true);
+        } else {
+            JmCheckcancel.setVisible(false);
+        }
+        //Veririca que el documento este timbrado
+        if (tim.equals("T")) {
+            if (e.equals("1")) {
+                JtCancelar.setEnabled(true);
+                //Lo desactiva si su estatus es activo
+                JmCheckcancel.setEnabled(false);
+            } else {
+                JtCancelar.setEnabled(false);
+                //Lo activa si su estatus es cancelado
+                JmCheckcancel.setEnabled(true);
+            }
+        } else {
+            JmCheckcancel.setEnabled(false);
+        }
     }//GEN-LAST:event_JtDetalleMousePressed
 
 
     private void JtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtCancelarActionPerformed
-        int resp = JOptionPane.showConfirmDialog(null, "Estas seguro de cancelar el cargo?");
+        int resp = JOptionPane.showConfirmDialog(null, "Estas seguro de cancelar el Pago?");
         if (resp == 0) {
             respcancela();
         }
     }//GEN-LAST:event_JtCancelarActionPerformed
 
+    private void JmCheckcancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmCheckcancelActionPerformed
+        int row = JtDetalle.getSelectedRow();
+        respcancela(arrfactura.get(row));
+    }//GEN-LAST:event_JmCheckcancelActionPerformed
+
+    /**
+     * Cancelacion de pago
+     */
     private void respcancela() {
         daofactura df = new daofactura();
         Formateodedatos fd = new Formateodedatos();
@@ -211,6 +256,11 @@ public class pagotpucargo1 extends javax.swing.JPanel {
                 arrfactura.get(row).getId(), fd.getbd_tocargo(u.getTurno()));
         if (df.Cancela_pagoespecial(cpt, ACobranza, arrabono)) {
             JOptionPane.showMessageDialog(null, "Exito al cancelar el pago");
+            //Funcion para cancelar en el SAT
+            if (!arrfactura.get(row).getFoliofiscal().equals("")) {
+                respcancela(arrfactura.get(row));
+            }
+            cancelacomision(cpt, arrabono);
             Buscanotas();
         } else {
             JOptionPane.showMessageDialog(null,
@@ -252,18 +302,92 @@ public class pagotpucargo1 extends javax.swing.JPanel {
         JtDetalle.setModel(model);
     }
 
-    private boolean verificaint(String cad) {
-        boolean resp = false;
-        String patt = "[0-9]+";
-        Pattern pat = Pattern.compile(patt);
-        Matcher match = pat.matcher(cad);
-        if (match.matches()) {
-            resp = true;
+    private void setreport(int folio, String moneda, double total) {
+        try {
+            String conformidad = (!moneda.equals("MXN")) ? "De conformidad con el Art. 20 del C.F.F., informamos que "
+                    + "para convertir moneda extranjera a su equivalente en moneda nacional, el tipo de cambio a "
+                    + "utilizar para efectos de pagos será el que publique el Banco de México en el Diario Oficial "
+                    + "de la Federación el día habil anterior al día de pago. Para su consulta: www.banxico.org.mx "
+                    + "(sección: Mercado cambiario/Tipos de cambio para solventar obligaciones denominadas en dólares de los Ee.Uu:A., pagaderas en la República Mexicana)" : " ";
+            daoempresa d = new daoempresa();
+//            Identificar si es de ath o uptown
+            Formateo_Nempresas fn = new Formateo_Nempresas();
+            Formateodedatos fd = new Formateodedatos();
+            String n = fn.getEmpresa(u.getTurno(), "");
+            String logo = fd.getimagenreporte(u);
+            Empresas e = d.getempresarfc(sqlempresa, n);
+//             fin identificar empresa
+            Map parametros = new HashMap();
+//            Clase que contiene el numero convertido a caracter
+            convertnum conv = new convertnum();
+//            Agregar parametros al reporte
+            parametros.put("folio", folio);
+            parametros.put("totalletra", conv.controlconversion(total).toUpperCase());
+            parametros.put("nombre", e.getNombre());
+            parametros.put("rfc", e.getRfc());
+            parametros.put("regimen", "");
+            parametros.put("lugar", e.getCp());
+            parametros.put("comprobante", e.getNumcertificado());
+            parametros.put("logo", logo);// direcion predefinida, posible cambiar en un futuro
+            parametros.put("serie", "RPAG");
+            parametros.put("regimencliente", "");
+            parametros.put("confo", conformidad);
+            parametros.put("bd", "_especial");
+
+            JasperReport jasper = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportestpu/index_ptpu_REM.jasper"));
+            JasperPrint print = JasperFillManager.fillReport(jasper, parametros, cpt);
+            JasperViewer ver = new JasperViewer(print, false); //despliegue de reporte
+            ver.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            ver.setTitle("RPAG " + folio);
+            ver.setVisible(true);
+        } catch (JRException ex) {
+            Logger.getLogger(pagotpurem1.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return resp;
     }
 
+    /**
+     * Funcion para cancelacion en el sat, debe de estar timbrada si no, no
+     * ejecuta la funcion de cancelar de la clase timbrado
+     *
+     * @param f
+     */
+    private void respcancela(factura f) {
+        String tim = (f.getFoliofiscal().equals("")) ? "N" : "T";
+//                Aplica solo si esta timbrada sino solo se da de baja en la bd
+        if (tim.equals("T")) {
+            Formateo_Nempresas fn = new Formateo_Nempresas();
+            String n = fn.getEmpresa(u.getTurno(), "");
+            timbrarXML t = new timbrarXML();
+            String resp = t.cancelarfolio("" + f.getFolio(), sqlempresa, n, f.getFoliofiscal());
+//            System.out.println(resp);
+            JOptionPane.showMessageDialog(null, resp, "Respuesta SAT",
+                    JOptionPane.INFORMATION_MESSAGE);
+            Buscanotas();
+        }
+    }
+
+    /**
+     * Funcion que busca la comision generada en su momento si es que termino de
+     * pagar y la cancela, con esto se refiere a que no se podra ver ni tomar su
+     * valor en cuanta En esta cuestion Se utiliza abono ya que es el array con
+     * el cual se obtienen los registros del pago
+     *
+     * @param cpt
+     * @param arr
+     */
+    public void cancelacomision(Connection cpt, ArrayList<abono> arr) {
+        dao_comisiones dc = new dao_comisiones();
+        ArrayList<Comision> arrcomi = new ArrayList<>();
+        for (abono arr1 : arr) {
+            Comision com = new Comision();
+            com.setId_cargo(arr1.getId_cargo());
+            com.setSerie("E");
+            arrcomi.add(com);
+        }
+        dc.cancelacomision(cpt, arrcomi);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem JmCheckcancel;
     private javax.swing.JMenuItem JtCancelar;
     public javax.swing.JTextField JtCliente;
     private javax.swing.JTable JtDetalle;

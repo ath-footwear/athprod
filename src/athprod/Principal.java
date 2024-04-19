@@ -11,6 +11,7 @@ import DAO.daoPrincipal;
 import DAO.daopedimentos;
 import Maq.Materialesmaq;
 import Maq.PagostpuCargos;
+import Maq.Tipomaquina;
 import Modelo.Conexiones;
 import Modelo.Formateodedatos;
 import Modelo.Procserie;
@@ -21,6 +22,7 @@ import Panelmaq.Rep_ventaxproducto;
 import Panelmaq.ReporteInventario;
 import Paneltpu.Impresion_etiquetas;
 import Paneltpu.Kardexprod;
+import Paneltpu.RepFacturas;
 import Paneltpu.RepSaldosV;
 import Paneltpu.Rep_Comisiones;
 import Paneltpu.Repauxcliente;
@@ -34,6 +36,7 @@ import Tpu.Agentestpu;
 import Tpu.Antiguedad;
 import Tpu.Cargos_especiales;
 import Tpu.ClientesTpu;
+import Tpu.Comisiones;
 import Tpu.Devolucionestpu;
 import Tpu.Durezastpu;
 import Tpu.EntradasSalidas;
@@ -65,6 +68,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -160,6 +164,7 @@ public final class Principal extends javax.swing.JFrame {
             JmSesion.setEnabled(false);
             jLabel1.requestFocus();
         }
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT-6"));//Para el cambio de horario
     }
 
     /**
@@ -235,6 +240,7 @@ public final class Principal extends javax.swing.JFrame {
         JmPedimento = new javax.swing.JMenuItem();
         JmEntradasS = new javax.swing.JMenuItem();
         JmDevoluciones = new javax.swing.JMenuItem();
+        JmComisionesadm = new javax.swing.JMenuItem();
         JmMaq = new javax.swing.JMenu();
         Catalogos1 = new javax.swing.JMenu();
         JmMaterial1 = new javax.swing.JMenuItem();
@@ -257,6 +263,7 @@ public final class Principal extends javax.swing.JFrame {
         JmPedimento1 = new javax.swing.JMenuItem();
         JmEntradasS1 = new javax.swing.JMenuItem();
         JmDevoluciones1 = new javax.swing.JMenuItem();
+        JmDescmaquinas1 = new javax.swing.JMenuItem();
         JmMaq2 = new javax.swing.JMenu();
         Catalogos2 = new javax.swing.JMenu();
         JmMaterial2 = new javax.swing.JMenuItem();
@@ -264,6 +271,7 @@ public final class Principal extends javax.swing.JFrame {
         JmCliente2 = new javax.swing.JMenuItem();
         JmFamilia2 = new javax.swing.JMenuItem();
         JmAgente1 = new javax.swing.JMenuItem();
+        JmDescmaquinas = new javax.swing.JMenuItem();
         Jmreportes2 = new javax.swing.JMenu();
         JmRepcob2 = new javax.swing.JMenu();
         JmEdocuenta2 = new javax.swing.JMenuItem();
@@ -273,6 +281,7 @@ public final class Principal extends javax.swing.JFrame {
         JmVentaserie3 = new javax.swing.JMenuItem();
         JmKardexprod2 = new javax.swing.JMenuItem();
         JmVentaserie4 = new javax.swing.JMenuItem();
+        JmVentaserie5 = new javax.swing.JMenuItem();
         JmVentaxprod = new javax.swing.JMenuItem();
         JmComisiones = new javax.swing.JMenuItem();
         JmCobranzatpu2 = new javax.swing.JMenu();
@@ -289,6 +298,7 @@ public final class Principal extends javax.swing.JFrame {
         JmPedimento2 = new javax.swing.JMenuItem();
         JmEntradasS2 = new javax.swing.JMenuItem();
         JmDevoluciones2 = new javax.swing.JMenuItem();
+        JmComisionesadm1 = new javax.swing.JMenuItem();
         JmCmp = new javax.swing.JMenu();
         JmCatalogoscmp = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
@@ -785,6 +795,15 @@ public final class Principal extends javax.swing.JFrame {
         });
         JmTpu.add(JmDevoluciones);
 
+        JmComisionesadm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/cash_40532.png"))); // NOI18N
+        JmComisionesadm.setText("Comisiones");
+        JmComisionesadm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmComisionesadmActionPerformed(evt);
+            }
+        });
+        JmTpu.add(JmComisionesadm);
+
         JmMaq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/industry_package_box_storage_factory_icon_188937.png"))); // NOI18N
         JmMaq.setText("Maquinaria");
         JmMaq.addMenuListener(new javax.swing.event.MenuListener() {
@@ -973,6 +992,15 @@ public final class Principal extends javax.swing.JFrame {
         });
         JmMaq.add(JmDevoluciones1);
 
+        JmDescmaquinas1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/prensa.png"))); // NOI18N
+        JmDescmaquinas1.setText("Descripcion de maquinas");
+        JmDescmaquinas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmDescmaquinas1ActionPerformed(evt);
+            }
+        });
+        JmMaq.add(JmDescmaquinas1);
+
         JmMaq2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/industry_package_box_storage_factory_icon_188937.png"))); // NOI18N
         JmMaq2.setText("Top Maquinaria");
         JmMaq2.addMenuListener(new javax.swing.event.MenuListener() {
@@ -1037,6 +1065,15 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
         Catalogos2.add(JmAgente1);
+
+        JmDescmaquinas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/prensa.png"))); // NOI18N
+        JmDescmaquinas.setText("Descripcion de maquinas");
+        JmDescmaquinas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmDescmaquinasActionPerformed(evt);
+            }
+        });
+        Catalogos2.add(JmDescmaquinas);
 
         JmMaq2.add(Catalogos2);
 
@@ -1104,6 +1141,15 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
         Jmreportes2.add(JmVentaserie4);
+
+        JmVentaserie5.setText("Reporte de facturas");
+        JmVentaserie5.setToolTipText("");
+        JmVentaserie5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmVentaserie5ActionPerformed(evt);
+            }
+        });
+        Jmreportes2.add(JmVentaserie5);
 
         JmVentaxprod.setText("Reporte de ventas x producto");
         JmVentaxprod.addActionListener(new java.awt.event.ActionListener() {
@@ -1241,6 +1287,15 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
         JmMaq2.add(JmDevoluciones2);
+
+        JmComisionesadm1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/cash_40532.png"))); // NOI18N
+        JmComisionesadm1.setText("Comisiones");
+        JmComisionesadm1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmComisionesadm1ActionPerformed(evt);
+            }
+        });
+        JmMaq2.add(JmComisionesadm1);
 
         JmCmp.setText("jMenu1");
 
@@ -2066,10 +2121,7 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_JmKardexprodActionPerformed
 
     private void JmVentaserieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmVentaserieActionPerformed
-        Ventasserie n = new Ventasserie(null, true);
-        n.u = conexion;
-        n.setconexiones(u);
-        n.setVisible(true);
+        setrepventas();
     }//GEN-LAST:event_JmVentaserieActionPerformed
 
     private void JmPagostpu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmPagostpu2ActionPerformed
@@ -2348,10 +2400,7 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_JmKardexprod2ActionPerformed
 
     private void JmVentaserie4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmVentaserie4ActionPerformed
-        Ventasserie n = new Ventasserie(null, true);
-        n.u = conexion;
-        n.setconexiones(u);
-        n.setVisible(true);
+        setrepventas();
     }//GEN-LAST:event_JmVentaserie4ActionPerformed
 
     private void JmNotascrtpu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmNotascrtpu2ActionPerformed
@@ -2556,6 +2605,74 @@ public final class Principal extends javax.swing.JFrame {
         setrepcomision();
     }//GEN-LAST:event_JmComisiones1ActionPerformed
 
+    private void JmComisionesadmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmComisionesadmActionPerformed
+        setcomisiones();
+    }//GEN-LAST:event_JmComisionesadmActionPerformed
+
+    private void JmComisionesadm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmComisionesadm1ActionPerformed
+        setcomisiones();
+    }//GEN-LAST:event_JmComisionesadm1ActionPerformed
+
+    private void JmDescmaquinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmDescmaquinasActionPerformed
+        setdescmaquinas();
+    }//GEN-LAST:event_JmDescmaquinasActionPerformed
+
+    private void JmDescmaquinas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmDescmaquinas1ActionPerformed
+        setdescmaquinas();
+    }//GEN-LAST:event_JmDescmaquinas1ActionPerformed
+
+    private void JmVentaserie5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmVentaserie5ActionPerformed
+        setrepfacts();
+    }//GEN-LAST:event_JmVentaserie5ActionPerformed
+
+        /**
+     * Despliega interfaz para reporte de facturas
+     */
+    private void setrepfacts() {
+        RepFacturas n = new RepFacturas(null, true);
+        n.u = conexion;
+        n.setconexiones(u);
+        n.setVisible(true);
+    }
+    
+    /**
+     * Despliega interfaz para reporte de ventas
+     */
+    private void setrepventas() {
+        Ventasserie n = new Ventasserie(null, true);
+        n.u = conexion;
+        n.setconexiones(u);
+        n.setVisible(true);
+    }
+
+    /**
+     * Despliega menu de gestion de descripcion de maquinas
+     */
+    private void setdescmaquinas() {
+        try {
+            Tipomaquina p = new Tipomaquina(conexion, u);
+            this.JdPanel.add(p);
+            p.setMaximum(true);
+            p.show();
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Despliega menu de comisiones
+     */
+    private void setcomisiones() {
+        try {
+            Comisiones p = new Comisiones(conexion, u);
+            this.JdPanel.add(p);
+            p.setMaximum(true);
+            p.show();
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * Muestra la interfaz del reporte de comisiones
      */
@@ -2564,12 +2681,12 @@ public final class Principal extends javax.swing.JFrame {
         n.setconexiones(u, conexion);
         n.setVisible(true);
     }
-    
+
     /**
      * Muestra la interfaz de los pagos especiales
      */
-    private void Pagoespecial(){
-            try {
+    private void Pagoespecial() {
+        try {
             Pagostpu p = new Pagostpu(conexion, u);
             this.JdPanel.add(p);
             p.setMaximum(true);
@@ -2627,7 +2744,7 @@ public final class Principal extends javax.swing.JFrame {
             try {
                 Serverylite s = new Serverylite();
                 liteusuario = s.getconexionusuarios();
-                liteempresa=s.getconexionC();
+                liteempresa = s.getconexionC();
 //                Es igual administrador pero con datos ya establecidos, 
 //                usado mas para rapidez y evitar la consulta a la bd
                 if (a.equals("0605")) {
@@ -2776,7 +2893,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void actualizaempresa() {
         boolean band = checkempresa();
-        
+
         if (!u.getUsuario().equals("")) {
             logint = 1;
             if (u.getTurno().equals("5")) {
@@ -2999,7 +3116,7 @@ public final class Principal extends javax.swing.JFrame {
 //                conexion.setCobranzamaqB(s.getconexionTPU("RACobranzamaq"));
 //                conexion.setRcpttpu(s.getconexionserver8("Tpurcpt"));
                 liteusuario = s1.getconexionusuarios();
-                liteempresa=s1.getconexionC();
+                liteempresa = s1.getconexionC();
                 conexion.setLiteusuario(liteusuario);
                 conexion.setLitecfdi(litecfdi);
                 conexion.setLiteempresa(liteempresa);
@@ -3208,7 +3325,11 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu JmCobranzatpu2;
     private javax.swing.JMenuItem JmComisiones;
     private javax.swing.JMenuItem JmComisiones1;
+    private javax.swing.JMenuItem JmComisionesadm;
+    private javax.swing.JMenuItem JmComisionesadm1;
     private javax.swing.JMenu JmConf;
+    private javax.swing.JMenuItem JmDescmaquinas;
+    private javax.swing.JMenuItem JmDescmaquinas1;
     private javax.swing.JMenuItem JmDevoluciones;
     private javax.swing.JMenuItem JmDevoluciones1;
     private javax.swing.JMenuItem JmDevoluciones2;
@@ -3282,6 +3403,7 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem JmVentaserie2;
     private javax.swing.JMenuItem JmVentaserie3;
     private javax.swing.JMenuItem JmVentaserie4;
+    private javax.swing.JMenuItem JmVentaserie5;
     private javax.swing.JMenu JmVentastpu;
     private javax.swing.JMenu JmVentastpu1;
     private javax.swing.JMenuItem JmVentaxprod;

@@ -225,12 +225,16 @@ public interface Facturas {
     public ArrayList<Dfactura> getfactwithseriedetallado(Connection rcpt, String factura, int año);
 
     public boolean updateclientefacv2(Connection con, Cliente c, int id_documento);
+    
+    public boolean updateclientefacv2_TPU(Connection con, Cliente c, int id_documento);
 
     public ArrayList<factura> searchPagncrtofac(Connection c, int iddoc, String serie, String bd);
+    
+    public ArrayList<factura> searchPagncrtofac_Especial(Connection c, int iddoc, String serie, String bd);
 
     public ArrayList<cargo> getfactrem(Connection cobB, String var, String ncob);
 
-    public ArrayList<factura> getregspcancelpagotpu(Connection c, int id, String bd);
+    public ArrayList<factura> getregspcancelpagotpu(Connection c, int id, String bd, String serie);
 
     public boolean execcancelacionPago(Connection c, Connection cob, ArrayList<factura> arr);
 
@@ -252,4 +256,5 @@ public interface Facturas {
 
     public boolean Cancela_cargoespecial(Connection cob, int cargo);
 
+    public boolean Cancelafactura_Especial(Connection cpt, Connection cob, factura f);
 }

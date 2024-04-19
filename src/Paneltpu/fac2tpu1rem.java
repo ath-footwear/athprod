@@ -5,6 +5,7 @@
  */
 package Paneltpu;
 
+import DAO.daoCargos;
 import DAO.daoConceptos;
 import Paneles.*;
 import DAO.daocfdi;
@@ -12,6 +13,7 @@ import DAO.daoempresa;
 import DAO.daofactura;
 import DAO.daokardexrcpt;
 import DAO.daopedimentos;
+import Dao.Dao_Agente;
 import Modelo.Agentes;
 import Modelo.Cliente;
 import Modelo.ConceptosES;
@@ -137,6 +139,8 @@ public class fac2tpu1rem extends javax.swing.JPanel {
         JlTcambio2 = new javax.swing.JLabel();
         JcConceptos = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
+        JcAgente = new javax.swing.JComboBox<>();
+        jLabel18 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -305,6 +309,12 @@ public class fac2tpu1rem extends javax.swing.JPanel {
         jLabel20.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel20.setText("Cliente");
 
+        JcCliente.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                JcClienteItemStateChanged(evt);
+            }
+        });
+
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         JcUsd1.setText("USD - Dolares");
@@ -361,10 +371,20 @@ public class fac2tpu1rem extends javax.swing.JPanel {
         jLabel21.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel21.setText("Conceptos");
 
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel18.setText("Agentes");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,20 +401,14 @@ public class fac2tpu1rem extends javax.swing.JPanel {
                         .addComponent(JsRel1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JcCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(78, 78, 78)
-                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(JcConceptos, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(JcConceptos, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(64, 64, 64)
+                                .addGap(90, 90, 90)
                                 .addComponent(jLabel21)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(231, 231, 231)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
@@ -407,49 +421,54 @@ public class fac2tpu1rem extends javax.swing.JPanel {
                             .addComponent(JtDescuento)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                        .addComponent(jLabel3))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JcCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JcAgente, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(50, 50, 50)
+                            .addComponent(jLabel2))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(8, 8, 8)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(JsRel1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(JtFolio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel6)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(JtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JsRel1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(JtFolio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(JtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20)
-                            .addComponent(jLabel21))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(JcCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JcConceptos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(70, 70, 70)
+                        .addComponent(jLabel21)
+                        .addGap(7, 7, 7)
+                        .addComponent(JcConceptos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(JcCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18)
+                    .addComponent(JcAgente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -488,146 +507,32 @@ public class fac2tpu1rem extends javax.swing.JPanel {
     }//GEN-LAST:event_JtFolio1ActionPerformed
 
     private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
-        if (!k2.isEmpty()) {
-            boolean a = verificafloat(JtDescuento.getText());
-            boolean a1 = verificadetalle();
-            boolean a2 = checkstock();
-            if (!a) {
-                JOptionPane.showMessageDialog(null, "Error, solo colocar numeros enteros en el descuento");
-            }
-            if (!a1) {
-                JOptionPane.showMessageDialog(null, "Error, Verifica los precios");
-            }
-            if (!a2) {
-                JOptionPane.showMessageDialog(null, "Error, La cantidad no puede ser mayor a lo que hay en stock o la cantidad es cero");
-            }
+        int row1 = JcCliente.getSelectedIndex();
+        //Verifica el credito del cliente y si es posible realizarle la venta
+        //Si es true es porque el saldo + total es menor al credito
+        if (checkcredito(arrcliente.get(row1).getCredito())) {
+            if (!k2.isEmpty()) {
+                boolean a = verificafloat(JtDescuento.getText());
+                boolean a1 = verificadetalle();
+                boolean a2 = checkstock();
+                if (!a) {
+                    JOptionPane.showMessageDialog(null, "Error, solo colocar numeros enteros en el descuento");
+                }
+                if (!a1) {
+                    JOptionPane.showMessageDialog(null, "Error, Verifica los precios");
+                }
+                if (!a2) {
+                    JOptionPane.showMessageDialog(null, "Error, La cantidad no puede ser mayor a lo que hay en stock o la cantidad es cero");
+                }
 //            System.out.println(a + " - " + a1);
-            if (!a && !a1 && !a2) {
-                JtDescuento.requestFocus();
-            } else {
-                factura f = new factura();
-                int row = 0;
-                String condicion;
-                java.util.Date date = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                Calendar fecha = Calendar.getInstance();
-                int mes = fecha.get(Calendar.MONTH) + 1;
-                daofactura dfac = new daofactura();
-                ArrayList<Dfactura> arrf = new ArrayList<>();
-                DecimalFormat formateador = new DecimalFormat("####.##");//para los decimales
-                f.setFolio(dfac.getmaxfoliotpu(cpt, "REM"));//Obtiene y setea el foliomaximo de *documentos
-                int rowc = JcCliente.getSelectedIndex();
-                Formateodedatos fort= new Formateodedatos();
-//                f.setFolio(n.getfolio());
-//                if (u.getTurno().equals("5")) {
-//                    f.setPedido("TPU " + mes + "-" + f.getFolio());
-//                } else if (u.getTurno().equals("6")) {
-//                    f.setPedido("MAQ " + mes + "-" + f.getFolio());
-//                } else if (u.getTurno().equals("7")) {
-//                    f.setPedido("MAQ " + mes + "-" + f.getFolio());
-//                }
-//              Obtiene el folio ya formateado de acuerdo al turno
-                f.setPedido(fort.folioremision(u.getTurno(), mes, f.getFolio()));
-                daokardexrcpt dk = new daokardexrcpt();
-                f.setFoliokardex(dk.maxkardexsincuenta(cpt));// folio del kardex
-                f.setClaveusuario(u.getUsuario());
-                f.setSerie("REM");
-                f.setTurno(u.getTurno());
-                f.setConceptos(arrcuentas.get(JcConceptos.getSelectedIndex()).getId_concepto());
-//                f.setConceptos(15);
-                f.setFecha(sdf.format(date));
-                f.setIdcliente(arrcliente.get(rowc).getCvecliente());
-                f.setNombre(arrcliente.get(rowc).getNombre());
-                f.setRfc(arrcliente.get(rowc).getRfc());
-                f.setCalle(arrcliente.get(rowc).getCalle());
-                f.setColonia(arrcliente.get(rowc).getColonia());
-                f.setMunicipio(arrcliente.get(rowc).getCiudad());
-                f.setEstado(arrcliente.get(rowc).getEstado());
-                f.setPais(arrcliente.get(rowc).getPais());
-                f.setCp(arrcliente.get(rowc).getCp());
-                f.setObservaciones(JtObs.getText().toUpperCase());
-                f.setLugarexpedicion("36400");
-                f.setPlazo(arrcliente.get(rowc).getPlazo());
-//                f.setAgente(k.get(row).getCli().getAgente());
-                f.setAgente(arrcliente.get(rowc).getAg().getIdagente());
-                if (JcUsd1.isSelected()) {
-                    f.setMoneda("USD");
-                    f.setTipocambio(Double.parseDouble(JtTCambio1.getText()));
+                if (!a && !a1 && !a2) {
+                    JtDescuento.requestFocus();
                 } else {
-                    f.setMoneda("MXN");
-                    f.setTipocambio(1);
+                    setfactura();
                 }
-                f.setEmpresa("1");
-                int totalpares = 0;// Se usa para la tabla facturas
-                impuestos = 0;
-                descuentos = 0;
-//                Detallado de productos selecionados
-                String cuenta=arrcuentas.get(JcConceptos.getSelectedIndex()).getCuenta();
-                String sb=arrcuentas.get(JcConceptos.getSelectedIndex()).getSubcuenta();
-                for (int i = 0; i < k2.size(); i++) {
-                    Dfactura df = new Dfactura();
-                    if (JtDetalle.getValueAt(i, 7).toString().equals("*")) {
-                        double precio = Double.parseDouble(formateador.format(Double.parseDouble(JtDetalle.getValueAt(i, 3).toString())));
-                        double tpares = Double.parseDouble(formateador.format(Double.parseDouble(JtDetalle.getValueAt(i, 2).toString())));
-                        double desc = Double.parseDouble(JtDescuento.getText()) / 100;
-                        double descuento = Double.parseDouble(formateador.format((tpares * precio) * desc));
-                        df.setRenglon(i + 1);
-                        df.setProducto(k2.get(i).getDp().getId_material());
-                        df.setCantidadfloat(tpares);
-                        df.setDescripcion(k2.get(i).getDp().getMatped());
-                        df.setCodigo(k2.get(i).getDp().getCodigosat());
-                        df.setUmedida(k2.get(i).getDp().getUnidad());
-                        df.setDureza(k2.get(i).getDp().getDureza());
-                        df.setId_dpedimento(k2.get(i).getDp().getId_dpedimento());
-                        df.setId_pedimento(k2.get(i).getId_pedimento());
-                        df.setDescumedida("");
-                        df.setImpuesto("000");
-                        df.setTipofactor("Tasa");
-                        String as1;
-                        df.setTasaocuota("0");
-                        if (cuenta.equals("60") && sb.equals("25")) {
-                            as1 = "0";
-                            df.setDescuento(0);
-                            df.setPrecio(0);
-                            df.setBase(0);
-                            df.setImporta(0);
-                            subtotal = 0;
-                        } else {
-                            String as = formateador.format(((tpares * precio) - descuento));
-                            as1 = formateador.format(descuento);
-                            df.setDescuento(Double.parseDouble(as1));
-                            df.setPrecio(Double.parseDouble(formateador.format(precio)));
-                            df.setBase(Double.parseDouble(formateador.format(precio * tpares)));
-                            df.setImporta(Double.parseDouble(as));
-                        }
-                        arrf.add(df);
-                        totalpares += tpares;
-                        impuestos = 0;
-                        descuentos += Double.parseDouble(as1);
-                    }
-                }
-                total = subtotal - descuentos;
-                f.setTotalpares(totalpares);
-                f.setArr(arrf);
-                f.setImpuestos(formatdecimal(impuestos));
-                f.setDescuento(formatdecimal(descuentos));
-                f.setSubtotal(formatdecimal(subtotal));
-                f.setTotal(formatdecimal(total));
-                if (arrf.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Error al realizar remision, intente capturar de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
-                    vaciarcampos();
-                } else {
-                    int id = dfac.nuevaremtpu(cpt, f, cobB);
-                    if (id != 0) {
-//                        setreport(id, f.getRegimen(), f.getMoneda(), "B", f.getPedido());
-                        JOptionPane.showMessageDialog(null, "Proceso terminado ");
-                        vaciarcampos();
-                        JtCliente.requestFocus();
-                    }
-                }
-
             }
         }
+
     }//GEN-LAST:event_jLabel2MousePressed
 
     public void cargacombos() {//catalogos de Sat
@@ -644,8 +549,28 @@ public class fac2tpu1rem extends javax.swing.JPanel {
         }
         JcCliente.setModel(cliente);
         JcConceptos.setModel(cuentas);
+        setAgentes();
     }
 
+        /**
+     * Se obtienen todos los cliente, se cargan y se busca cual es el agente que
+     * llega con la salida y da la opcion de elegir cualquier otro
+     */
+    private void setAgentes() {
+        DefaultComboBoxModel ag = new DefaultComboBoxModel();
+        Dao_Agente da1 = new Dao_Agente();
+        arragente = da1.getagentes_all(ACobranza);
+        for (Agentes agent : arragente) {
+            ag.addElement(agent.getNombre());
+        }
+        JcAgente.setModel(ag);
+        for (int i = 0; i < arragente.size(); i++) {
+            if (arrcliente.get(JcCliente.getSelectedIndex()).getAg().getIdagente() == arragente.get(i).getIdagente()) {
+                JcAgente.setSelectedIndex(i);
+            }
+        }
+    }
+    
     /**
      * Funcion para determinar si la cantidad decimal es redondeada o truncada
      * ya que el sat maneja ambos y no solo uno porque si no aveces saldran mal
@@ -683,6 +608,133 @@ public class fac2tpu1rem extends javax.swing.JPanel {
             resp = BigDecimal.valueOf(cant).setScale(2, RoundingMode.HALF_UP).doubleValue();
         }
         return resp;
+    }
+
+    /**
+     * Setea valores en el objeto inserta nuevos valos en la bd y ademas genera
+     * el XMl
+     */
+    private void setfactura() {
+        factura f = new factura();
+        int row = 0;
+        String condicion;
+        java.util.Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Calendar fecha = Calendar.getInstance();
+        int mes = fecha.get(Calendar.MONTH) + 1;
+        daofactura dfac = new daofactura();
+        ArrayList<Dfactura> arrf = new ArrayList<>();
+        DecimalFormat formateador = new DecimalFormat("####.##");//para los decimales
+        f.setFolio(dfac.getmaxfoliotpu(cpt, "REM"));//Obtiene y setea el foliomaximo de *documentos
+        int rowc = JcCliente.getSelectedIndex();
+        Formateodedatos fort = new Formateodedatos();
+//                f.setFolio(n.getfolio());
+//                if (u.getTurno().equals("5")) {
+//                    f.setPedido("TPU " + mes + "-" + f.getFolio());
+//                } else if (u.getTurno().equals("6")) {
+//                    f.setPedido("MAQ " + mes + "-" + f.getFolio());
+//                } else if (u.getTurno().equals("7")) {
+//                    f.setPedido("MAQ " + mes + "-" + f.getFolio());
+//                }
+//              Obtiene el folio ya formateado de acuerdo al turno
+        f.setPedido(fort.folioremision(u.getTurno(), mes, f.getFolio()));
+        daokardexrcpt dk = new daokardexrcpt();
+        f.setFoliokardex(dk.maxkardexsincuenta(cpt));// folio del kardex
+        f.setClaveusuario(u.getUsuario());
+        f.setSerie("REM");
+        f.setTurno(u.getTurno());
+        f.setConceptos(arrcuentas.get(JcConceptos.getSelectedIndex()).getId_concepto());
+//                f.setConceptos(15);
+        f.setFecha(sdf.format(date));
+        f.setIdcliente(arrcliente.get(rowc).getCvecliente());
+        f.setNombre(arrcliente.get(rowc).getNombre());
+        f.setRfc(arrcliente.get(rowc).getRfc());
+        f.setCalle(arrcliente.get(rowc).getCalle());
+        f.setColonia(arrcliente.get(rowc).getColonia());
+        f.setMunicipio(arrcliente.get(rowc).getCiudad());
+        f.setEstado(arrcliente.get(rowc).getEstado());
+        f.setPais(arrcliente.get(rowc).getPais());
+        f.setCp(arrcliente.get(rowc).getCp());
+        f.setObservaciones(JtObs.getText().toUpperCase());
+        f.setLugarexpedicion("36400");
+        f.setPlazo(arrcliente.get(rowc).getPlazo());
+//                f.setAgente(k.get(row).getCli().getAgente());
+        f.setAgente(arrcliente.get(rowc).getAg().getIdagente());
+        if (JcUsd1.isSelected()) {
+            f.setMoneda("USD");
+            f.setTipocambio(Double.parseDouble(JtTCambio1.getText()));
+        } else {
+            f.setMoneda("MXN");
+            f.setTipocambio(1);
+        }
+        f.setEmpresa("1");
+        int totalpares = 0;// Se usa para la tabla facturas
+        impuestos = 0;
+        descuentos = 0;
+//                Detallado de productos selecionados
+        String cuenta = arrcuentas.get(JcConceptos.getSelectedIndex()).getCuenta();
+        String sb = arrcuentas.get(JcConceptos.getSelectedIndex()).getSubcuenta();
+        for (int i = 0; i < k2.size(); i++) {
+            Dfactura df = new Dfactura();
+            if (JtDetalle.getValueAt(i, 7).toString().equals("*")) {
+                double precio = Double.parseDouble(formateador.format(Double.parseDouble(JtDetalle.getValueAt(i, 3).toString())));
+                double tpares = Double.parseDouble(formateador.format(Double.parseDouble(JtDetalle.getValueAt(i, 2).toString())));
+                double desc = Double.parseDouble(JtDescuento.getText()) / 100;
+                double descuento = Double.parseDouble(formateador.format((tpares * precio) * desc));
+                df.setRenglon(i + 1);
+                df.setProducto(k2.get(i).getDp().getId_material());
+                df.setCantidadfloat(tpares);
+                df.setDescripcion(k2.get(i).getDp().getMatped());
+                df.setCodigo(k2.get(i).getDp().getCodigosat());
+                df.setUmedida(k2.get(i).getDp().getUnidad());
+                df.setDureza(k2.get(i).getDp().getDureza());
+                df.setId_dpedimento(k2.get(i).getDp().getId_dpedimento());
+                df.setId_pedimento(k2.get(i).getId_pedimento());
+                df.setDescumedida("");
+                df.setImpuesto("000");
+                df.setTipofactor("Tasa");
+                String as1;
+                df.setTasaocuota("0");
+                if (cuenta.equals("60") && sb.equals("25")) {
+                    as1 = "0";
+                    df.setDescuento(0);
+                    df.setPrecio(0);
+                    df.setBase(0);
+                    df.setImporta(0);
+                    subtotal = 0;
+                } else {
+                    String as = formateador.format(((tpares * precio) - descuento));
+                    as1 = formateador.format(descuento);
+                    df.setDescuento(Double.parseDouble(as1));
+                    df.setPrecio(Double.parseDouble(formateador.format(precio)));
+                    df.setBase(Double.parseDouble(formateador.format(precio * tpares)));
+                    df.setImporta(Double.parseDouble(as));
+                }
+                arrf.add(df);
+                totalpares += tpares;
+                impuestos = 0;
+                descuentos += Double.parseDouble(as1);
+            }
+        }
+        total = subtotal - descuentos;
+        f.setTotalpares(totalpares);
+        f.setArr(arrf);
+        f.setImpuestos(formatdecimal(impuestos));
+        f.setDescuento(formatdecimal(descuentos));
+        f.setSubtotal(formatdecimal(subtotal));
+        f.setTotal(formatdecimal(total));
+        if (arrf.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error al realizar remision, intente capturar de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
+            vaciarcampos();
+        } else {
+            int id = dfac.nuevaremtpu(cpt, f, cobB);
+            if (id != 0) {
+//                        setreport(id, f.getRegimen(), f.getMoneda(), "B", f.getPedido());
+                JOptionPane.showMessageDialog(null, "Proceso terminado ");
+                vaciarcampos();
+                JtCliente.requestFocus();
+            }
+        }
     }
 
     /**
@@ -798,13 +850,17 @@ public class fac2tpu1rem extends javax.swing.JPanel {
     }//GEN-LAST:event_JcConceptosMousePressed
 
     private void JcConceptosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_JcConceptosItemStateChanged
-        int row=JcConceptos.getSelectedIndex();
-        String cuenta=arrcuentas.get(row).getCuenta();
-        String sc=arrcuentas.get(row).getSubcuenta();
+        int row = JcConceptos.getSelectedIndex();
+        String cuenta = arrcuentas.get(row).getCuenta();
+        String sc = arrcuentas.get(row).getSubcuenta();
         if (cuenta.equals("60") && sc.equals("25")) {
             JOptionPane.showMessageDialog(null, "Seleccionaste consignacion, recuerda que el cargo e importe será de cero");
         }
     }//GEN-LAST:event_JcConceptosItemStateChanged
+
+    private void JcClienteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_JcClienteItemStateChanged
+        setAgentes();
+    }//GEN-LAST:event_JcClienteItemStateChanged
 
 //    Llena la lista con todos los folios de acuerdo al cliente
     private void llenalistasalida() {
@@ -988,17 +1044,6 @@ public class fac2tpu1rem extends javax.swing.JPanel {
         }
     }
 
-    private boolean verificaint(String cad) {
-        boolean resp = false;
-        String patt = "[0-9]+";
-        Pattern pat = Pattern.compile(patt);
-        Matcher match = pat.matcher(cad);
-        if (match.matches()) {
-            resp = true;
-        }
-        return resp;
-    }
-
     private boolean verificafloat(String cad) {
         boolean resp = false;
         String patt = "[0-9]+||[0-9]+.[0-9]+";
@@ -1022,18 +1067,39 @@ public class fac2tpu1rem extends javax.swing.JPanel {
         return resp;
     }
 
-    private boolean verificaregimen(Connection cfdi, String regimen, String uso) {
-        daocfdi df = new daocfdi();
-        boolean a = true;
-        String resp = df.getRegimenxuso(cfdi, regimen, uso);
-        if (resp.equals("")) {
-            JOptionPane.showMessageDialog(null, "Error, El regimen del cliente no se puede usar con este uso cfdi");
-            a = false;
+    /**
+     * Verifica que el saldo mas el total no exceda el credito del cliente
+     *
+     * @param credito
+     * @param saldo
+     * @return booelan
+     */
+    private boolean checkcredito(double credito) {
+        daoCargos dc = new daoCargos();
+        Formateodedatos fd = new Formateodedatos();
+        int row = JcCliente.getSelectedIndex();
+        double saldo = total;
+        //Se suma el saldo anterior que es el total mas el actual
+        saldo += dc.getcargopendiente(ACobranza, arrcliente.get(row).getId_cliente(),
+                fd.getB_or_Amovs(u.getTipo_usuario(), u.getTurno(), "B"));
+        //Formatea el saldo a 2 decimales
+        saldo = fd.formatdecimalv2(saldo);
+        //Si el saldo es mayor es false y despliega un mensaje
+        if (saldo > credito) {
+            JcCliente.requestFocus();
+            JOptionPane.showMessageDialog(null,
+                    " El SALDO mas el TOTAL exceden el credito preestablecido"
+                    + " saldo=" + saldo + ", credito=" + credito,
+                    "Error en Credito",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            return true;
         }
-        return a;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> JcAgente;
     private javax.swing.JComboBox<String> JcCliente;
     private javax.swing.JComboBox<String> JcConceptos;
     private javax.swing.JCheckBox JcUsd1;
@@ -1054,6 +1120,7 @@ public class fac2tpu1rem extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;

@@ -16,24 +16,54 @@ import java.util.ArrayList;
  */
 public class daoClientes implements clientes {
 
+    /**
+     * Obtiene el listado de clientes, solo con ATH/UPTOWN, no aplica en TPU
+     *
+     * @param c
+     * @return
+     */
     @Override
     public ArrayList<Cliente> getClientes(Connection c) {
         sqlclientes s = new sqlclientes();
         return s.getClientes(c);
     }
 
+    /**
+     * Obtiene los datos del cliente, de acuerdo a su numero de cliente, no
+     * aplica en TPU
+     *
+     * @param c Conexion cobranza
+     * @param id id del cliente
+     * @return
+     */
     @Override
     public Cliente getCliente(Connection c, int id) {
         sqlclientes s = new sqlclientes();
         return s.getCliente(c, id);
     }
 
+    /**
+     * Funcion para obtener el cliente e importarlo a tpu o maq no aplica para
+     * RCPT's
+     *
+     * @param c
+     * @param cliente
+     * @return
+     */
     @Override
     public Cliente getClientes(Connection c, int cliente) {
         sqlclientes s = new sqlclientes();
         return s.getClientes(c, cliente);
     }
 
+    /**
+     * Funcion para importar a la bd el cliente de cobranza, claramente ya debe
+     * de estar validado y que los datos del cliente sean correctos
+     *
+     * @param c
+     * @param cli
+     * @return
+     */
     @Override
     public boolean importacliente(Connection c, Cliente cli) {
         sqlclientes s = new sqlclientes();
@@ -67,6 +97,13 @@ public class daoClientes implements clientes {
         return s.getClientestpuall(c, cli);
     }
 
+    /**
+     * Actualizacion de datos del cliente
+     *
+     * @param cpt
+     * @param cli
+     * @return
+     */
     @Override
     public boolean modcliente(Connection cpt, Cliente cli) {
         sqlclientes s = new sqlclientes();
@@ -96,6 +133,78 @@ public class daoClientes implements clientes {
     public int maxcliente(Connection cob) {
         sqlclientes s = new sqlclientes();
         return s.maxcliente(cob);
+    }
+
+    /**
+     * Busca si existe el clente y regresa un boleana validando si existe o no
+     *
+     * @param con conexion cobranza
+     * @param c objeto cliente
+     * @return
+     */
+    @Override
+    public boolean exist_cliente(Connection con, Cliente c) {
+        sqlclientes s = new sqlclientes();
+        return s.exist_cliente(con, c);
+    }
+
+    /**
+     * Obtiene los datos del cliente pero de tpu,maq etc, lo que no este ligado
+     * con rcpt o athletic/uptown, funcion generalmente utilizada para obtener
+     * los datos discales, mas sin embargo si es necesario mas campos solo
+     * añadirlos
+     *
+     * @param c
+     * @param id
+     * @return
+     */
+    @Override
+    public Cliente getClientetpu(Connection c, int id) {
+        sqlclientes s = new sqlclientes();
+        return s.getClientetpu(c, id);
+    }
+
+    /**
+     * Busca los clientes que tengan cargos pendientes sin repetir el cliente
+     *
+     * @param con cpt
+     * @param nombre nombre del cliente
+     * @param bd bd de cobranza
+     * @return lista de clientes
+     */
+    @Override
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes(Connection con, String nombre, String bd) {
+        sqlclientes s = new sqlclientes();
+        return s.getfoliotopagotpu_Clientes(con, nombre, bd);
+    }
+
+    /**
+     * Busca los clientes que tengan cargos pendientes sin repetir el cliente,
+     * para esto solo funciona con remision, ya que la consulta es distinta
+     *
+     * @param con
+     * @param nombre
+     * @return
+     */
+    @Override
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes_REM(Connection con, String nombre) {
+        sqlclientes s = new sqlclientes();
+        return s.getfoliotopagotpu_Clientes_REM(con, nombre);
+    }
+
+    /**
+     * Busca los clientes que tengan cargos especiales pendientes sin repetir el
+     * cliente
+     *
+     * @param con conexion cobranza si no hay que meter documentos u otra bd
+     * @param nombre valor del campo
+     * @param bd campo extra por si enb algun momento hay cambio o uso de una
+     * @return
+     */
+    @Override
+    public ArrayList<Cliente> getfoliotopagotpu_Clientes_ESPECIAL(Connection con, String nombre, String bd) {
+        sqlclientes s = new sqlclientes();
+        return s.getfoliotopagotpu_Clientes_ESPECIAL(con, nombre, bd);
     }
 
 }
